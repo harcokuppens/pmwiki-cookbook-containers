@@ -6,7 +6,7 @@
   //    code . 
   //
   // docs: https://containers.dev/implementors/json_reference/
-  "name": "pmwiki-basic",
+  "name": "pmwiki-cookbook-${COOKBOOK}",
   "dockerComposeFile": ["./docker-compose.yml"],
   "service": "pmwiki",
   "shutdownAction": "none", // the supporting tools do not stop the containers when the related tool window is closed / shut down
