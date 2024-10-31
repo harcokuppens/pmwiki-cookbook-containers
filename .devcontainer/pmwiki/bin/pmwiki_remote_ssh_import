@@ -8,6 +8,15 @@ USAGE
 DESCRIPTION
 
     Mirror a remote site without overwriting the new cookbook we are locally developing.
+    In that way we can test our cookbook within the remote setup and data.
+
+    The local site could have a different pmwiki install as the remote site.
+    We can use this to test the remote site in a new pmwiki version.
+    Only added items to an original pmwiki installation are mirrored. That is only the 
+    configuration, cookbook extensions,  the wiki pages and its uploads are
+    mirrored from the remote site. The means we mirror only the subfolders local/, cookbook/,
+    wiki.d/, uploads/ and pub/.
+
     The name of the new cookbook is determined from the COOKBOOK environment variable.
     Your cookbook X can consist of directories pmwiki/cookbook/X/ and pmwiki/pub/X/. When
     the remote site is mirrored we make sure that we keep these folders of your cookbook X,
@@ -90,3 +99,5 @@ mirror --no-warn --rsync-options "$rsync_options" $remotewiki/uploads $localwiki
 mirror --no-warn --rsync-options "$rsync_options" $remotewiki/local $localwikidir/local
 mirror --no-warn --rsync-options "$rsync_options" -f "- $mycookbookdir" $remotewiki/cookbook $localwikidir/cookbook
 mirror --no-warn --rsync-options "$rsync_options" -f "- $mycookbookdir" $remotewiki/pub $localwikidir/pub
+
+
