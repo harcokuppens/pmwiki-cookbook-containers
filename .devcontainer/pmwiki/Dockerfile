@@ -271,9 +271,9 @@ RUN echo "umask 000" >> /etc/profile
 #      user can open terminal in container and can easily setup container to be exactly like a website in production;
 #      The given ssh path argument determines the remote pmwiki production site from which data and config is mirrored.
 #      Note: ssh credentials for git can be accessed via ssh-agent on host in vscode terminal
-COPY ${DOCKERFILE_DIR}/bin/pmwiki_remote_ssh_import /usr/bin/pmwiki_remote_ssh_import
-RUN chmod a+x /usr/bin/pmwiki_remote_ssh_import 
-# install dependencies of pmwiki-import script:
+COPY ${DOCKERFILE_DIR}/bin/pmwiki_mirror_remote_site /usr/bin/pmwiki_mirror_remote_site
+RUN chmod a+x /usr/bin/pmwiki_mirror_remote_site
+# install dependencies of pmwiki_mirror_remote_site script:
 # install "mirror" cmdline utility to easily mirror files into container (wrapper of rsync using ssh)
 RUN curl -sL --output /usr/bin/mirror  https://raw.githubusercontent.com/harcokuppens/mirror/v1.1.2/bin/mirror
 RUN chmod a+x /usr/bin/mirror 

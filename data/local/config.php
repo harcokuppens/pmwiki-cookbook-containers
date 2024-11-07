@@ -54,3 +54,80 @@ $EnablePathInfo = 1;
 # 2. strip for url used in generated content the script name pmwiki.php and the subdir pmwiki
 # changing the generated url from https://localhost/pmwiki/pmwiki.php/Group/Page  to url https://localhost/Group/Page
 $ScriptUrl = dirname(dirname($ScriptUrl));
+
+
+#-----------------------------------------------
+#  debug/info 
+#-----------------------------------------------
+#
+# http://www.pmwiki.org/wiki/PmWiki/DebugVariables
+$EnableDiag = 1;  # disable(0) in production
+## The following actions are available only if you set $EnableDiag = 1;
+#   ?action=ruleset  : displays a list of all markups
+#   ?action=phpinfo  : phpinfo()
+#   ?action=diag     : displays a dump of all global vars
+
+#-----------------------------------------------
+#  images and uploads
+#-----------------------------------------------
+
+$EnableUpload = 1;
+
+# note: I set upload max size by default to big value but most off the times
+#       the config values in php.ini  will limit it down to a lower value ( see 
+#       further below)
+#$UploadMaxSize =  8388608; # limit upload file size to 8 megabyte
+$UploadMaxSize = 31457280; # limit upload file size to 30 megabyte
+#$UploadPrefixFmt = '/$Group/$Name'; 
+$UploadPrefixFmt = '/$Group';
+
+# to allow larger uploads set in php.ini 
+#
+#     upload_max_filesize = 30M
+#     post_max_size = 31M
+#
+# src: https://www.a2hosting.com/kb/developer-corner/php/using-php.ini-directives/php-maximum-upload-file-size
+# To ensure that file uploads work correctly, the post_max_size directive should
+# be a little larger than the upload_max_filesize. 
+
+# extra images which can be uploaded; IMPORTANT: also add to $ImgExtPattern for in web page viewing of image
+$UploadExts['svg'] = 'image/svg+xml';
+$UploadExts['svgz'] = 'image/svg+xml';
+
+
+# following types are regarded as images
+$ImgExtPattern = "\\.(?:svgz|svg|gif|jpg|jpeg|png|SVGZ|SVG|GIF|JPG|JPEG|PNG)";
+
+#-----------------------------------------------
+#  cookbook RecipeInfo
+#-----------------------------------------------
+
+# https://www.pmwiki.org/wiki/Cookbook/RecipeInfo
+# 
+# in page you need to define a wiki style:
+#
+#   %define=recipeinfo color=black background-color=#f7f7f7 border='1px solid #cccccc' padding=4px%
+#
+# in config you need to define:
+Markup(
+    '^Property:',
+    'block',
+    '/^([A-Z][-\\w]+):(\\s.*)?$/',
+    '<:block,0><div class=\'property-$1\'>$0</div>'
+);
+# then you can use  markup for describing cookbooks with syntax 
+//   >>recipeinfo<<
+//   Summary: How to create a recipeinfo box like it is used in the cookbook
+//   Version: 2007-02-26
+//   Prerequisites: pmwiki
+//   Status: stable
+//   Maintainer:
+//   Categories:
+//   (:if exists {$Name}-Talk:)Discussion: [[{$Name}-Talk]](:if:)
+//   >><<
+
+
+#-----------------------------------------------
+#  cookbook  
+#-----------------------------------------------
+@include_once("$FarmD/local/includecookbook.php");

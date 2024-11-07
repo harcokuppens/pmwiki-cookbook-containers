@@ -1,145 +1,71 @@
-# Basic PmWiki for developing cookbook scripts.
+# Containers cookbook for PmWiki
 
 ## Description
 
-This repository defines a basic pmwiki installation in devcontainer which you can use
-to develop cookbook scripts. You can also use this repository as base to publish your
-cookbook with example pages. This allows you to directly view the cookbook in action
-using docker compose.
+<span style="color:red">PUT HERE A SHORT DESCRIPTION OF THE COOKBOOK. THE DETAILS ARE
+AT RECIPE PAGE.</span>
 
-The following config files are used in the container
+The details of the Containers cookbook are described on
+[the Containers cookbook's recipe page](https://www.pmwiki.org/wiki/Cookbook/Containers).
+The source code of this cookbook is at
+[the Containers cookbook's repository](https://github.com/harcokuppens/pmwiki-cookbook-containers), which also provides a
+devcontainer in which you can see the plugin in action and further develop it. The
+devcontainer is based on the basic pmwiki devcontainer at https://github.com/harcokuppens/pmwiki-basic.
 
-- `.devcontainer/.env`
+## Quickstart to view cookbook in action
 
-  Its content is:
+### Get cookbook in PmWiki running in devcontainer
 
-      COOKBOOK=mycookbook
+This repository defines a devcontainer with a basic pmwiki installation with the
+MyCookbook cookbook installed. You can use this repository to see the cookbook in
+action in the devcontainer by doing:
 
-  which defines the name of your cookbook used in the
-  `.devcontainer/docker-compose.yml` file. Edit in this file your cookbook name. The
-  name should match the subfolders in `data/cookbook/` and `data/pub/`. By default we
-  set this to `mycookbook` and made the matching subdirs in `data/cookbook/` and
-  `data/pub/` in this repository, so that directly can start experimenting with a
-  `mycookbook` cookbook.
+1.  Run the container with docker using the command:
 
-- `.devcontainer/devcontainer.json`
+        docker compose -f .devcontainer/docker-compose.yml up -d --build
 
-  Configuration file for vscode the devcontainer which specifies that vscode
+2.  Then view the wiki in the browser at:
 
-  - use as workspace folder `/var/www/html/pmwiki`
-  - use docker compose with file `.devcontainer/docker-compose.yml`
-  - use `pmwiki` container in vscode as devcontainer
-  - use some plugins in vscode for developing `php`
+        http://localhost:8080
+             or
+        https://localhost:8443
 
-- `.devcontainer/docker-compose.yml`
+Then at the wiki's HomePage the cookbook should already be shown in action.
 
-  Configuration for the containers to run, which can be used within vscode, but also
-  without vscode when using `docker compose` directly. This compose has only one
-  container, the container `pmwiki` defined in `.devcontainer/pmwiki/`. Because we
-  only use one container we could have defined to use a `Dockerfile` directly in
-  vscode's `.devcontainer/devcontainer.json` file. However the
-  `.devcontainer/docker-compose.yml` lets us easily define extra options in how to
-  use the container. Eg. port mappings and bindings.
+### Credentials
 
-  To avoid port conflicts we map port 80 to 8080 and port 443 to 8443, where we
-  expose them only on the localhost interface. Edit this file if you want to use
-  other port mappings. You can also change the used version of PmWiki in the
-  `PMWIKI_VERSION` argument to the PmWiki container.
+To play with the cookbook's code in the page you can login and edit the HomePage.
 
-  The docker compose configuration bind mounts the following local folders inside the
-  local `./data/` folder into the `/var/www/html/pmwiki/` folder inside the `pmwiki`
-  container:
+By default we already configured two accounts in `data/local/config.php`:
 
-  - `wiki.d` for wiki pages
-  - `uploads`: for attachments/pictures in pages
-  - `local`: for the `local.php` configuration file
-  - `cookbook/${COOKBOOK}`: for binding only my cookbook's `php` script(s)
-  - `pub/${COOKBOOK}`: for binding only my cookbook's `pub` file(s)
+- a test user which can edit pages:
+  - username: testuser
+  - password: testuser
+- an administrator account which has all rights:
+  - username: admin
+  - password: admin
 
-  The name of your cookbook in the `${COOKBOOK}` variable in the
-  `.devcontainer/docker-compose.yml` is read from the `.devcontainer/.env` file which
-  gets applied before parsing the `docker-compose.yml` file. Edit the
-  `.devcontainer/.env` file if you want to change your cookbook name. The `COOKBOOK`
-  environment variable inside your container gets also set to the name of your
-  container.
+## Develop cookbook in devcontainer using vscode
 
-  Note that these bindings could also be defined in the
-  `.devcontainer/devcontainer.json` file, but by defining it in the
-  `.devcontainer/docker-compose.yml` the bindings also are applied when not using
-  vscode.
-
-- `.devcontainer/pmwiki/Dockerfile`
-
-  The `Dockerfile` defines how the PmWiki container is build. It installs the PmWiki
-  version `PMWIKI_VERSION` defined in the `docker-compose.yml` file. The webserver
-  used is `apache` on which also `SSL` is enabled. The PmWiki website uses the
-  configuration set in `local/config.php` in the local repository folder. It also
-  uses the local folders `wiki.d`, `uploads`,`local` and `cookbook` by bind mounting
-  them in the container. As developer you can then easily place your cookbook script
-  and test pages locally and use them in the container.
-
-  The container is run with the `root` user. This is the same as on a normal linux
-  distribution where the apache server is initially run as root to be able to open
-  the lower privilige ports, after which the apache server switches to the `www-data`
-  user.
-
-## Setup your cookbook folder
-
-When starting to develop your cookbook make folders for it. Here an example for a
-cookbook named `examplecookbook`.
-
-     COOKBOOK=examplecookbook
-     mkdir data/cookbook/$COOKBOOK
-     mkdir data/pub/$COOKBOOK
-
-then edit `.devcontainer/.env` to make it look like:
-
-     COOKBOOK=examplecookbook
-
-Then you can start the container to work on your cookbook. This can be done either
-with our without vscode explained in the next two sections.
-
-The `COOKBOOK` environment variable inside your container gets also set to the name
-of your container.
-
-## Run with docker compose (without vscode):
-
-To just run the container do:
-
-     docker compose  -f .devcontainer/docker-compose.yml  up -d --build
-
-You can view the logs with:
-
-     docker compose  -f .devcontainer/docker-compose.yml  logs -f
-
-Then open in browser:
-
-     https://localhost:8080
-              or
-     https://localhost:8443
-
-Because the `docker exec` command by default uses the user defined in `Dockerfile` or
-`docker-compose.yml` the following command will open a bash shell with the `root`
-user:
-
-    docker exec -it pmwiki-pmwiki-1 bash
-
-However, as explained above, the apache server and php code engine will operate using
-the `www-data` user. Hence, when editing via a bash shell one can better open the
-shell with the `www-data` user:
-
-    docker exec -it -u www-data pmwiki-pmwiki-1 bash
-
-## Run by opening devcontainer with vscode
+You can use this repository to see the cookbook in action in the devcontainer, but
+you can also use the devcontainer the further develop this cookbook in vscode.
 
 In vscode you have `php` debugging support. Convenient if you want to develop a
 cookbook `php` script.
 
-Open project from folder in vscode with command
+### Open the devcontainer in vscode
+
+To open the devcontainer in vscode run the command
+
+To open the devcontainer in vscode first open the project folder in vscode, and then
+inside vscode run the command
 
     'Dev Containers: Open folder in Container...'
 
-or from command line when in folder:
+and then select the project folder.
+
+You can also open the devcontainer from the command line by going to the project
+folder and then run:
 
       code .
 
@@ -153,30 +79,48 @@ The devcontainer is setup to use the user `www-data` used by apache and php as t
 `www-data` user. Which means that the vscode editor uses the `www-data` when editing
 files making sure they can always be read by apache and php.
 
-Then open in browser:
-
-     https://localhost:8080
-              or
-     https://localhost:8443
-
 Within vscode you can then easily edit and debug php code. The `Dockerfile` for the
 container has already buildin a `launch.json` for debugging with xdebug within
 vscode. So everything is already setup to directly debug php code.
 
-## Credentials
+### Local folders are binded into container
 
-PmWiki allows you to login as an user to edit pages or do any online configuration.
+Mount binding lets you conveniently edit files locally on your docker host, and lets
+you persist these folders when the container is restarted from scratch.
 
-By default we already configure two accounts in `data/local/config.php`:
+The following folders will be binded into the container:
 
-- a test user which can edit pages:
-  - username: testuser
-  - password: testuser
-- an administrator account which has all rights:
-  - username: admin
-  - password: admin
+- `wiki.d` for wiki pages
+- `uploads`: for attachments/pictures in pages
+- `local`: for the `local.php` configuration file
+- `cookbook/containers`: for binding only my cookbook's `php`
+  script(s)
+- `pub/containers`: for binding only my cookbook's `pub` file(s)
 
-## Helper scripts
+Only the cookbook subdirectory is mounted, because as developer you are only
+interested in that specific cookbook. Next to that the `pub/` directory also
+containers files installed by PmWiki which you do not want to mess with.
+
+For more details about how the devcontainer is configured see the
+[container-configuration-files section](https://github.com/harcokuppens/pmwiki-basic/blob/main/README.md#container-configuration-files)
+in the [pmwiki-basic repository](https://github.com/harcokuppens/pmwiki-basic/) on
+which this repository is based.
+
+### Open bash shell in container
+
+Because the `docker exec` command by default uses the user defined in `Dockerfile` or
+`docker-compose.yml` the following command will open a bash shell with the `root`
+user:
+
+    docker exec -it pmwiki-containers-ctr bash
+
+However, the apache server and php code engine will operate using the `www-data`
+user. Hence, when editing via a bash shell one can better open the shell with the
+`www-data` user:
+
+    docker exec -it -u www-data pmwiki-containers-ctr bash
+
+### Helper scripts
 
 Helper scripts available in the `bin/` directory of this repository, but also builtin
 to the container for direct usage within the container.
@@ -189,27 +133,61 @@ to the container for direct usage within the container.
 
   Imports text content of `INPUTFILE` as a wikipage in `OUTPUTFILE`.
 
-- `pmwiki_remote_ssh_import` `USER@REMOTEHOST:REMOTEPMWIKIDIR`
-
-  **Run this script from a shell in your container.**
+- `pmwiki_mirror_remote_site` `USER@REMOTEHOST:REMOTEPMWIKIDIR`
 
   Mirror a remote site without overwriting the new cookbook we are locally
-  developing. The name of the new cookbook is determined from the `COOKBOOK`
-  environment variable. Your cookbook `X` can consist of directories
-  `pmwiki/cookbook/X/` and `pmwiki/pub/X/`. When the remote site is mirrored we make
-  sure that we keep these folders of your cookbook `X`, because when mirroring from a
-  remote side not having these folders they would get removed! So what you finally
-  get is the remote `cookbook/` and `pub/` folder with your cookbook folders added.
+  developing. **Run this script from a shell in your container.** This can be useful
+  to test a new cookbook within an existing wiki site. Advised is to run this script
+  in a terminal within vscode, because
+  [vscode automatically forwards your local SSH agent if one is running](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials).
 
-  The argument `USER@REMOTEHOST:REMOTEPMWIKIDIR` is an rsync remote location using
-  the SSH protocol to mirror the files.
+  The full documentation of `pmwiki_mirror_remote_site` is given when run without
+  arguments:
 
-  This script's behavior:
+      $ pmwiki_mirror_remote_site
+      USAGE
 
-  - the name of your cookbook is taken from the COOKBOOK environment variable.
-  - the folder /var/www/html/pmwiki is taken as the local pmwiki folder into which
-    data gets mirrored.
-  - files bigger then 0.5MB are skipped from mirroring
+        pmwiki_mirror_remote_site [-d SUBDIR]* [-c COOKBOOKNAME]* [-s MAXSIZE] [-l LOCALPMWIKIDIR]  USER@REMOTEHOST:REMOTEPMWIKIDIR
 
-  Using this script we can easily check whether your new cookbook also works in an
-  existing production site.
+      DESCRIPTION
+
+        Mirror a remote site without overwriting the new cookbook we are locally developing.
+        In that way we can test our cookbook within the remote setup and data.
+
+        The local site could have a different pmwiki install as the remote site.
+        We can use this to test the remote site in a new pmwiki version.
+        Only added items to an original pmwiki installation are mirrored. That is only the
+        configuration, cookbook extensions,  the wiki pages and its uploads are
+        mirrored from the remote site. The means we mirror only the subfolders local/, cookbook/,
+        wiki.d/, uploads/ and pub/.
+
+        The name of the new cookbook is determined from the COOKBOOK environment variable.
+        Your cookbook X can consist of directories pmwiki/cookbook/X/ and pmwiki/pub/X/. When
+        the remote site is mirrored we make sure that we keep these folders of your cookbook X,
+        because when mirroring from a remote side not having these folders they would get removed!
+        So what you finally get is the remote cookbook/ and pub/ folder with your cookbook folders
+        added.
+
+        The argument USER@REMOTEHOST:REMOTEPMWIKIDIR is an rsync remote location using the SSH protocol
+        to mirror the files.
+
+        This script's behavior:
+          - the name of your cookbook is taken from the COOKBOOK environment variable.
+          - the folder /var/www/html/pmwiki is taken as the local pmwiki folder into which data gets mirrored.
+          - files bigger then 0.5MB are skipped from mirroring
+
+        Options:
+
+         -d SUBDIR
+            Add extra sub directory in remote location to be mirrored. Multiple -d options may be specified.
+         -c COOKBOOKNAME
+            Specify a cookbook to excluded from mirroring. By default the value from the COOKBOOK environment
+            variable is taken, but is ignored if this option is given. Multiple -c options may be specified.
+         -s MAXSIZE
+            Files with this size or larger are not mirrored. Default MAXSIZE=0.5m (half megabyte).
+            With MAXSIZE=0 then all files are mirrored.
+         -l LOCALPMWIKIDIR
+            Specifiy a different location for the local PmWiki directory. Default is /var/www/html/pmwiki.
+
+  By default the name of the cookbook is determined from the `COOKBOOK` environment
+  variable, which by default is already set inside the containers environment.
