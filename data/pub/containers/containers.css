@@ -1,0 +1,105 @@
+/* generic for all kind of containers (content and size independent)*/
+.containerColumns, .containerRows {   
+    padding:0;
+    margin:0;
+             
+   --ctr-width: calc( var(--content-width) + 2 * var(--content-margin) );
+}   
+   
+.containerColumns {
+   /* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_multicol_layout/Using_multicol_layouts */
+   /* containers are organised in columns: first fill first column, then second ... */
+   column-gap: 0px;
+   column-width: var(--ctr-width);
+}    
+
+.containerColumns  > .container {
+   /*https://stackoverflow.com/questions/47059839/css-columns-not-aligned-in-safari*/
+   display: flex ;
+   break-inside: avoid;
+   page-break-inside: avoid;
+   -webkit-column-break-inside: avoid; 
+   
+}   
+   
+.containerRows::after {    
+ /* https://www.w3schools.com/css/css_float_clear.asp
+      https://developer.mozilla.org/en-US/docs/Web/CSS/::after 
+      https://www.w3schools.com/cssref/sel_after.php
+ */
+ /* clearfix at end of page tag */
+ content: "";
+ clear: both;
+ display: table;
+}
+.containerRows >  .container {
+   /* https://www.w3schools.com/css/css_float.asp */
+   /* containers float left to fill row for row */
+   float: left;
+}  
+   
+.container {
+   /* 
+      Containers are the boxes which are layout and do not have a margin.
+      They are layout without any space between them. 
+   
+      Within a container is a content box(div) with a shadow which is
+      placed within the container. The container also has no padding.
+      The content box can create spacing between it and the container
+      by setting a margin on the content box. 
+   */
+   padding:0;
+   margin:0;   
+   overflow:hidden;
+}
+   
+.container > .content {   
+   /* 
+      Content div contains the content show in the containers.
+   
+      Within a container is a content box(div) with a shadow which is
+      placed within the container. The container also has no padding.
+      The content box can create spacing between it and the container
+      by setting a margin on the content box. 
+   
+      The end user can fill the content as desired.
+      By default a padding and margin is set and overflow is set to auto 
+      so that content will stay within the box with a nice padding. 
+      In case of overflow the padding at bottom will disappear so
+      that we can see the overflow has happened. When you then
+      move the mouse over the content box a scrollbar appears
+      so that you can scroll its content within the content box.
+   
+   */
+   /* https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing 
+       border-box tells the browser to account for any border and padding  
+       in the values you specify for an element's width and height.
+       ->  padding included in width and height, but margin not.
+   */
+   box-sizing: border-box;
+   width: var(--content-width);        
+   height: var(--content-height);  
+              
+   position: relative;
+   
+   padding:var(--content-padding);
+   margin:var(--content-margin );
+   
+   /* shadow must be smaller then content padding or margin because otherwise
+      in case of content overflow then on safari the context box will
+      be places outside container (BUG) 
+      Hack: take smallest value of 5px or margin/2 or padding/2 => value is always 5px or smaller.
+   */
+   --shadow: min( 5px, calc( var(--content-margin) / 2 ), calc( var(--content-padding) / 2 ) ); 
+   box-shadow: 0 0 var(--shadow) rgba(0, 0, 0, 0.2);
+   
+   /* if overflow happens in y direction, then scrollbar is added which
+       can cause overflow in x direction 
+       In most cases by flow rules we will not get overflow in x direction
+       and only in y direction. So to prevent scrollbar in x direction
+       we hide overflow in x direction, so never a hor. scrollbar will
+       appear.
+   */
+   overflow-x:hidden;
+   overflow-y:auto;
+}

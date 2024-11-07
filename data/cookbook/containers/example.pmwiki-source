@@ -1,0 +1,157 @@
+! Containers examples
+
+!!!Recipe overview
+
+(:containersToggleButton:)
+
+(:containers by="row"  style="max-width:540px;background-color:#f5f6ea" ctrstyle="box-shadow:none;margin:20px;padding:10px;width:140px;height:60px;"  :)
+
+column width : container width + 2 * container margin : 140 + 2 * 20 = 180   ==> for 3 columns you need width 540px
+note: content inside containers but outside a container is ignored
+
+(:container:)
+'''Prep Time:'''\\
+20 mins
+(:containerend:)
+
+(:container:)
+'''Cook Time:'''\\
+10 mins
+(:containerend:)
+
+(:container:)
+'''Freeze Time:'''\\
+30 mins
+(:containerend:)
+
+(:container:)
+'''Chill Time:'''\\
+30 mins
+(:containerend:)
+
+(:container:)
+'''Total Time:'''\\
+1 hr 30 mins
+(:containerend:)
+
+(:container:)
+'''Servings:'''\\
+4
+(:containerend:)
+(:containersend:)
+
+
+
+!!!Person overview 
+
+(:containersToggleButton:)
+
+(:containers fmt="person" :)
+(:container:)
+:title: dr.                 
+:name:  Some Scientist          
+:function: scientific programmer    
+:image: /skins/pmwiki/pmwiki-32.gif         
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container:)
+:title: drs.                 
+:name:  Programmer          
+:function: scientific programmer  
+:image: https://www.pngall.com/wp-content/uploads/2017/03/Donald-Duck-Free-PNG-Image.png          
+:home: http://www.wikipedia.org   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container:)
+:title: dr.                 
+:name:  Researcher          
+:function: postdoc           
+:image:  uploadedImage.png    
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container:)
+:title: prof.                 
+:name:  Einstein          
+:function: Professor             
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container:)                 
+:name:  John          
+:function: Management assistent                        
+(:containerend:)
+
+(:container:)
+:title: dr.                 
+:name:  Doe                 
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/               
+(:containerend:)
+
+(:containersend:)
+
+
+
+!!!Person overview mangled
+
+(:containersToggleButton style="" label="alternative label and style":)
+
+(:containers fmt="person" ctrstyle="width:330px;height:150px;"  style="border-style:solid;border-width:3px;":)
+
+
+(:container style="border-style:solid;border-width:1px;":)
+:title: drs.                 
+:name:  Programmer          
+:function: scientific programmer             
+:home: http://www.wikipedia.org   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container:)
+:title: dr.                 
+:name:  Researcher          
+:function: postdoc              
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container style="background-color:#f5f6ea":)
+:title: prof.                 
+:name:  Einstein          
+:function: Professor            
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:container style="box-shadow:none;padding:20px;":)                 
+:name:  John          
+:function: Management assistent                           
+(:containerend:)
+
+(:container fmt="" containsMarkdown=true:)
+:title: dr.                 
+:name:  Doe                    
+:home: http://www.wikipedia.org  
+:scholar: https://scholar.google.com/               
+(:containerend:)
+
+
+(:container style="width:280px;height:200px;":)
+:title: dr.                 
+:name:  Some Scientist          
+:function: scientific programmer             
+:scholar: https://scholar.google.com/   
+:dblp: https://dblp.uni-trier.de/               
+(:containerend:)
+
+(:containersend:)
