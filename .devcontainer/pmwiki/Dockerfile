@@ -69,7 +69,7 @@ FROM php:7.4-apache
 #
 # for debugging we install
 #--------------------------
-RUN apt-get update && apt-get -y install vim less iproute2 iputils-ping tree rsync ssh git python3
+RUN apt-get update && apt-get -y install vim less iproute2 iputils-ping tree rsync ssh git python3 unzip
 
 # configure caching of ssh password, so you only have to supply password first time per host name
 # https://superuser.com/questions/1362894/cache-the-password-if-ssh-keys-are-forbidden
@@ -284,6 +284,13 @@ RUN chmod a+x /usr/bin/pmwiki_exportfile
 COPY ${DOCKERFILE_DIR}/bin/pmwiki_importfile /usr/bin/pmwiki_importfile
 RUN chmod a+x /usr/bin/pmwiki_importfile
 
+#---------------------------------------------------------------
+#  add cookbook scripts
+#---------------------------------------------------------------
+
+# add imagepopup to view pictures larger when clicked on
+# NOTE: focus is on the container cookbook in this repository, the imagepopup is just an extension to make it somewhat nicer
+RUN curl -s -L https://www.pmwiki.org/pmwiki/uploads/Cookbook/imagepopup-20241031.zip  --output /tmp/imagepopup.zip && unzip /tmp/imagepopup.zip -d  ${PMWIKI_DIR} && rm /tmp/imagepopup.zip    
 
 #---------------------------------------------------------------
 #  add xdebug debugging support  
